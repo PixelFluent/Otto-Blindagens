@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposta · Ateliê de Blindagem Automotiva</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:       #06070D;
+  --bg2:      #0B0D16;
+  --card:     #0F1120;
+  --border:   #1A1D2E;
+  --blue:     #0071E3;
+  --blue2:    #2997FF;
+  --blue-dk:  #0066CC;
+  --glow:     rgba(41,151,255,.12);
+  --text:     #F0F0F5;
+  --muted:    #7E7E8A;
+  --muted2:   #55555F;
+  --radius:   5px;
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,Arial,'Helvetica Neue',sans-serif;
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── FLARES ────────────────────────────────── */
+.flare{
+  position:fixed;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:0;
+  mix-blend-mode:screen;
+  will-change:transform;
+}
+.flare-a{
+  width:900px;height:900px;
+  top:-300px;left:-300px;
+  background:radial-gradient(circle,rgba(0,113,227,.07) 0%,transparent 65%);
+  animation:driftA 22s ease-in-out infinite;
+}
+.flare-b{
+  width:700px;height:700px;
+  bottom:-200px;right:-200px;
+  background:radial-gradient(circle,rgba(41,151,255,.09) 0%,transparent 65%);
+  animation:driftB 28s ease-in-out infinite;
+}
+.flare-c{
+  width:400px;height:400px;
+  top:40vh;left:60vw;
+  background:radial-gradient(circle,rgba(0,113,227,.05) 0%,transparent 65%);
+  animation:driftC 18s ease-in-out infinite;
+}
+.flare-mouse{
+  width:280px;height:280px;
+  background:radial-gradient(circle,rgba(41,151,255,.09) 0%,transparent 70%);
+  transform:translate(-50%,-50%);
+  transition:left .08s linear,top .08s linear;
+  z-index:1;
+}
+@keyframes driftA{0%,100%{transform:translate(0,0)}40%{transform:translate(120px,80px)}70%{transform:translate(-60px,140px)}}
+@keyframes driftB{0%,100%{transform:translate(0,0)}35%{transform:translate(-90px,-110px)}70%{transform:translate(70px,-80px)}}
+@keyframes driftC{0%,100%{transform:translate(0,0)}50%{transform:translate(-80px,60px)}}
+
+/* ── TYPOGRAPHY ─────────────────────────────── */
+.t-hero{
+  font-family:-apple-system,'SF Pro Display','Helvetica Neue',Arial,sans-serif;
+  font-size:clamp(38px,7vw,82px);
+  font-weight:700;
+  line-height:1.03;
+  letter-spacing:-.03em;
+}
+.t-heading{
+  font-family:-apple-system,'SF Pro Display','Helvetica Neue',Arial,sans-serif;
+  font-size:clamp(26px,4vw,38px);
+  font-weight:700;
+  line-height:1.15;
+  letter-spacing:-.02em;
+}
+.t-sub{font-size:clamp(16px,2vw,20px);color:var(--muted);line-height:1.75}
+.t-eyebrow{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--blue2);
+}
+.blue{color:var(--blue2)}
+.muted{color:var(--muted)}
+
+/* ── LAYOUT ─────────────────────────────────── */
+.wrap{max-width:1100px;margin:0 auto;padding:0 28px}
+section{position:relative;z-index:2;padding:100px 0}
+section.alt{background:var(--bg2)}
+.rule{height:1px;background:var(--border);position:relative;z-index:2}
+
+/* ── FADE IN ─────────────────────────────────── */
+.fi{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease}
+.fi.on{opacity:1;transform:none}
+
+/* ════════════════════════════════════════════
+   HERO — scroll-driven canvas
+════════════════════════════════════════════ */
+#hero-wrap{
+  position:relative;
+  height:320vh;   /* tall → scroll room for animation */
+  z-index:2;
+}
+#hero-sticky{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow:hidden;
+}
+#hero-canvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.hero-veil{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(
+    to bottom,
+    rgba(6,7,13,.80) 0%,
+    rgba(6,7,13,.55) 25%,
+    rgba(6,7,13,.60) 60%,
+    rgba(6,7,13,.95) 100%
+  );
+}
+/* side vignette */
+.hero-veil::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:radial-gradient(ellipse 80% 90% at 50% 50%,transparent 30%,rgba(6,7,13,.65) 100%);
+}
+
+/* NAV */
+.hero-nav{
+  position:absolute;
+  top:0;left:0;right:0;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:28px 36px;
+  z-index:10;
+}
+.nav-logo{height:34px;width:auto;filter:brightness(0) invert(1)}
+.nav-tag{
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,.5);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:var(--radius);
+  padding:6px 14px;
+}
+
+/* HERO CONTENT */
+.hero-content{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  padding:0 36px 100px;
+  z-index:10;
+  transition:opacity .4s ease;
+}
+.hero-eyebrow{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--blue2);
+  margin-bottom:18px;
+}
+.hero-title{color:#fff;margin-bottom:18px}
+.hero-title span{color:var(--blue2)}
+
+.hero-desc{
+  font-size:clamp(15px,1.8vw,18px);
+  color:rgba(255,255,255,.65);
+  max-width:540px;
+  line-height:1.75;
+  margin-bottom:36px;
+}
+
+.hero-cta{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.2);
+  backdrop-filter:blur(12px);
+  border-radius:var(--radius);
+  padding:14px 28px;
+  color:#fff;
+  font-size:15px;
+  font-weight:500;
+  text-decoration:none;
+  letter-spacing:.01em;
+  transition:background .2s,border-color .2s;
+}
+.hero-cta:hover{background:rgba(0,113,227,.25);border-color:rgba(41,151,255,.5)}
+
+/* SCROLL ARROW */
+.scroll-arrow{
+  position:absolute;
+  bottom:32px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:10;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+}
+.scroll-arrow svg{animation:arrowBob 2s ease-in-out infinite}
+.scroll-arrow-line{
+  width:1px;
+  height:32px;
+  background:linear-gradient(to bottom,rgba(255,255,255,.4),transparent);
+  animation:lineGrow 2s ease-in-out infinite;
+}
+@keyframes arrowBob{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
+@keyframes lineGrow{0%,100%{opacity:.4}50%{opacity:.8}}
+
+/* LOAD PROGRESS */
+#load-bar{
+  position:absolute;
+  bottom:0;left:0;
+  height:2px;
+  background:var(--blue2);
+  width:0%;
+  transition:width .1s linear;
+  z-index:20;
+}
+
+/* ════════════════════════════════════════════
+   STATS STRIP (below hero)
+════════════════════════════════════════════ */
+.stats-strip{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  background:var(--card);
+  border-bottom:1px solid var(--border);
+  position:relative;
+  z-index:2;
+}
+.stat-item{
+  padding:36px 28px;
+  text-align:center;
+  border-right:1px solid var(--border);
+}
+.stat-item:last-child{border-right:none}
+.stat-n{
+  font-family:-apple-system,'SF Pro Display',Arial,sans-serif;
+  font-size:40px;
+  font-weight:700;
+  color:var(--blue2);
+  line-height:1;
+  display:block;
+  margin-bottom:8px;
+}
+.stat-l{
+  font-size:11px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+/* ════════════════════════════════════════════
+   01 — O CENÁRIO
+════════════════════════════════════════════ */
+.cenario-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:60px;
+  align-items:center;
+  margin-top:56px;
+}
+.cenario-photo{
+  position:relative;
+  border-radius:var(--radius);
+  overflow:hidden;
+  aspect-ratio:3/2;
+}
+.cenario-photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  filter:brightness(.85) contrast(1.05);
+}
+.cenario-photo::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+}
+.cenario-photo-glow{
+  position:absolute;
+  inset:0;
+  box-shadow:inset 0 0 40px rgba(0,113,227,.15);
+}
+
+.compare-list{list-style:none;margin-top:28px}
+.compare-item{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  padding:11px 0;
+  border-bottom:1px solid var(--border);
+  font-size:15px;
+}
+.compare-item:last-child{border-bottom:none}
+.compare-item.dim{color:var(--muted)}
+.cico{
+  width:20px;height:20px;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;font-weight:700;
+  flex-shrink:0;margin-top:2px;
+}
+.cico-x{background:rgba(255,59,48,.12);color:#FF3B30}
+.cico-ok{background:rgba(0,113,227,.15);color:var(--blue2)}
+
+/* ════════════════════════════════════════════
+   02 — O QUE ENTREGAMOS
+════════════════════════════════════════════ */
+.deli-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-top:52px;
+}
+.deli-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:28px 22px;
+  transition:border-color .25s,transform .25s,box-shadow .25s;
+  cursor:default;
+}
+.deli-card:hover{
+  border-color:rgba(41,151,255,.35);
+  transform:translateY(-4px);
+  box-shadow:0 12px 40px rgba(0,113,227,.08);
+}
+.deli-icon{font-size:1.6rem;margin-bottom:14px;display:block}
+.deli-title{
+  font-family:-apple-system,'SF Pro Display',Arial,sans-serif;
+  font-size:14px;font-weight:600;
+  color:var(--text);margin-bottom:7px;
+}
+.deli-desc{font-size:12px;color:var(--muted);line-height:1.65}
+
+/* ════════════════════════════════════════════
+   FOTO BREAK (full-width cinematic)
+════════════════════════════════════════════ */
+.foto-break{
+  position:relative;
+  z-index:2;
+  height:360px;
+  overflow:hidden;
+}
+.foto-break img{
+  width:100%;height:100%;
+  object-fit:cover;
+  filter:brightness(.6) contrast(1.1) saturate(.9);
+}
+.foto-break-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to right,rgba(6,7,13,.8) 0%,transparent 50%,rgba(6,7,13,.8) 100%);
+}
+.foto-break-text{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  text-align:center;
+}
+.foto-break-text h3{
+  font-family:-apple-system,'SF Pro Display',Arial,sans-serif;
+  font-size:clamp(20px,3vw,32px);
+  font-weight:700;
+  color:#fff;
+  letter-spacing:-.015em;
+}
+.foto-break-text p{
+  font-size:14px;
+  color:rgba(255,255,255,.5);
+  margin-top:8px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+
+/* ════════════════════════════════════════════
+   03 — O CONTEÚDO
+════════════════════════════════════════════ */
+.plan-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+  margin-top:52px;
+  align-items:start;
+}
+.plan-block{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:34px 30px;
+}
+.plan-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  margin-bottom:26px;
+  padding-bottom:18px;
+  border-bottom:1px solid var(--border);
+}
+.plan-count{
+  font-family:-apple-system,'SF Pro Display',Arial,sans-serif;
+  font-size:48px;font-weight:700;
+  color:var(--blue2);line-height:1;
+}
+.plan-lbl{
+  font-size:11px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:4px;
+}
+.plan-type{
+  font-family:-apple-system,'SF Pro Display',Arial,sans-serif;
+  font-size:16px;font-weight:600;color:var(--text);
+}
+.plan-emoji{font-size:1.6rem}
+
+.v-list,.p-list{list-style:none}
+.v-item,.p-item{
+  display:flex;gap:12px;
+  padding:11px 0;
+  border-bottom:1px solid var(--border);
+}
+.v-item:last-child,.p-item:last-child{border-bottom:none}
+.v-num{
+  font-size:11px;font-weight:700;
+  color:var(--blue2);width:20px;
+  flex-shrink:0;padding-top:3px;
+}
+.v-title,.p-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:2px}
+.v-pillar,.p-type{font-size:11px;color:var(--muted)}
+.p-emo{font-size:.95rem;flex-shrink:0}
+
+.note-box{
+  background:rgba(0,113,227,.07);
+  border-left:2px solid var(--blue);
+  border-radius:0 var(--radius) var(--radius) 0;
+  padding:14px 18px;
+  margin-top:10px;
+  font-size:13px;
+  line-height:1.65;
+  color:var(--muted);
+}
+.note-box strong{color:var(--blue2)}
+
+/* VIDRO PHOTO CARD */
+.proof-photo{
+  border-radius:var(--radius);
+  overflow:hidden;
+  aspect-ratio:3/2;
+  margin-top:10px;
+}
+.proof-photo img{
+  width:100%;height:100%;
+  object-fit:cover;
+  filter:brightness(.8) contrast(1.1);
+  transition:transform .4s ease;
+}
+.proof-photo:hover img{transform:scale(1.03)}
+.proof-label{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-top:none;
+  border-radius:0 0 var(--radius) var(--radius);
+  padding:12px 16px;
+  font-size:12px;
+  color:var(--muted);
+  display:flex;align-items:center;gap:8px;
+}
+.proof-label::before{
+  content:'';
+  width:6px;height:6px;
+  border-radius:50%;
+  background:var(--blue2);
+  flex-shrink:0;
+}
+
+/* ════════════════════════════════════════════
+   04 — COMO FUNCIONA
+════════════════════════════════════════════ */
+.process-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:60px;
+  margin-top:52px;
+  align-items:start;
+}
+.process-photo{
+  border-radius:var(--radius);
+  overflow:hidden;
+  aspect-ratio:4/3;
+  position:relative;
+}
+.process-photo img{
+  width:100%;height:100%;
+  object-fit:cover;
+  filter:brightness(.75) contrast(1.05);
+}
+.process-photo::after{
+  content:'';
+  position:absolute;inset:0;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+}
+
+.timeline{display:flex;flex-direction:column}
+.tl-item{
+  display:grid;
+  grid-template-columns:96px 1px 1fr;
+  gap:0 22px;
+  padding-bottom:36px;
+}
+.tl-item:last-child{padding-bottom:0}
+.tl-week{text-align:right;padding-top:2px}
+.tl-wlabel{
+  font-size:11px;font-weight:700;
+  letter-spacing:.07em;text-transform:uppercase;
+  color:var(--blue2);
+}
+.tl-line{display:flex;flex-direction:column;align-items:center}
+.tl-dot{
+  width:9px;height:9px;
+  background:var(--blue);
+  border-radius:50%;flex-shrink:0;margin-top:3px;
+}
+.tl-con{width:1px;flex:1;background:var(--border);margin-top:6px}
+.tl-title{
+  font-family:-apple-system,'SF Pro Display',Arial,sans-serif;
+  font-size:16px;font-weight:600;
+  color:var(--text);margin-bottom:4px;
+}
+.tl-desc{font-size:13px;color:var(--muted);line-height:1.7}
+
+/* ════════════════════════════════════════════
+   05 — RESULTADOS
+════════════════════════════════════════════ */
+.results-grid-wrap{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:48px;
+  margin-top:52px;
+  align-items:start;
+}
+.kpi-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+.kpi-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:28px 20px;
+  text-align:center;
+  transition:border-color .2s;
+}
+.kpi-card:hover{border-color:rgba(41,151,255,.3)}
+.kpi-val{
+  font-family:-apple-system,'SF Pro Display',Arial,sans-serif;
+  font-size:32px;font-weight:700;
+  color:var(--blue2);
+  display:block;margin-bottom:8px;line-height:1;
+}
+.kpi-lbl{font-size:12px;color:var(--muted);line-height:1.5}
+
+.results-photo{
+  border-radius:var(--radius);
+  overflow:hidden;
+  aspect-ratio:5/3;
+  position:relative;
+}
+.results-photo img{
+  width:100%;height:100%;
+  object-fit:cover;
+  filter:brightness(.7) contrast(1.1) saturate(.8);
+}
+.results-photo-caption{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  padding:16px;
+  background:linear-gradient(to top,rgba(6,7,13,.9),transparent);
+  font-size:12px;
+  color:rgba(255,255,255,.5);
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+
+/* ════════════════════════════════════════════
+   06 — 6 MESES
+════════════════════════════════════════════ */
+#commitment{
+  background:linear-gradient(135deg,#051A40 0%,#091230 50%,#040C20 100%);
+  padding:110px 0;
+  position:relative;
+  overflow:hidden;
+}
+#commitment::before{
+  content:'';
+  position:absolute;
+  top:-200px;left:50%;transform:translateX(-50%);
+  width:800px;height:800px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(0,113,227,.15) 0%,transparent 65%);
+  pointer-events:none;
+}
+.commit-eyebrow{
+  font-size:11px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(41,151,255,.7);margin-bottom:18px;
+}
+.commit-title{
+  font-family:-apple-system,'SF Pro Display',Arial,sans-serif;
+  font-size:clamp(34px,6vw,66px);
+  font-weight:700;color:#fff;
+  line-height:1.06;letter-spacing:-.025em;
+  margin-bottom:20px;
+}
+.commit-sub{
+  font-size:18px;
+  color:rgba(255,255,255,.6);
+  max-width:520px;line-height:1.75;
+  margin-bottom:52px;
+}
+.months-row{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:8px;
+  max-width:560px;
+  margin-bottom:40px;
+}
+.m-pill{
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:var(--radius);
+  padding:10px 6px;
+  font-size:11px;font-weight:700;
+  color:rgba(255,255,255,.8);
+  text-align:center;letter-spacing:.03em;
+  transition:background .2s,border-color .2s;
+}
+.m-pill:hover{background:rgba(0,113,227,.3);border-color:rgba(41,151,255,.5)}
+.commit-note{font-size:13px;color:rgba(255,255,255,.4);line-height:1.8}
+
+/* ════════════════════════════════════════════
+   07 — PIXEL FLUENT
+════════════════════════════════════════════ */
+#pixelfluent{
+  background:var(--bg2);
+  border-top:1px solid var(--border);
+  padding:80px 0;
+}
+.pf-row{
+  display:flex;align-items:center;gap:44px;
+}
+.pf-logo img{
+  height:60px;width:auto;
+  filter:brightness(0) invert(1);
+  opacity:.9;
+}
+.pf-sep{width:1px;height:60px;background:var(--border);flex-shrink:0}
+.pf-eyebrow{
+  font-size:11px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);margin-bottom:6px;
+}
+.pf-name{
+  font-family:-apple-system,'SF Pro Display',Arial,sans-serif;
+  font-size:20px;font-weight:700;
+  color:var(--text);margin-bottom:10px;
+}
+.pf-desc{font-size:14px;color:var(--muted);max-width:420px;line-height:1.75}
+
+/* ════════════════════════════════════════════
+   FOOTER
+════════════════════════════════════════════ */
+footer{
+  background:var(--bg);
+  border-top:1px solid var(--border);
+  padding:24px 0;text-align:center;
+  position:relative;z-index:2;
+}
+footer p{font-size:12px;color:var(--muted2)}
+
+/* ════════════════════════════════════════════
+   RESPONSIVE
+════════════════════════════════════════════ */
+@media(max-width:960px){
+  section{padding:72px 0}
+  .cenario-grid{grid-template-columns:1fr;gap:36px}
+  .cenario-photo{order:-1}
+  .deli-grid{grid-template-columns:repeat(2,1fr)}
+  .plan-grid{grid-template-columns:1fr}
+  .process-grid{grid-template-columns:1fr;gap:36px}
+  .results-grid-wrap{grid-template-columns:1fr}
+  .pf-row{flex-direction:column;text-align:center;gap:24px}
+  .pf-sep{width:56px;height:1px}
+  .pf-desc{margin:0 auto}
+  .stats-strip{grid-template-columns:1fr}
+  .stat-item{border-right:none;border-bottom:1px solid var(--border)}
+  .stat-item:last-child{border-bottom:none}
+}
+@media(max-width:640px){
+  .wrap{padding:0 20px}
+  section{padding:56px 0}
+  .hero-content{padding:0 24px 80px}
+  .hero-nav{padding:20px 24px}
+  .deli-grid{grid-template-columns:1fr}
+  .kpi-grid{grid-template-columns:1fr}
+  .months-row{grid-template-columns:repeat(3,1fr)}
+  .tl-item{grid-template-columns:72px 1px 1fr;gap:0 14px}
+  .foto-break{height:240px}
+}
+</style>
+</head>
+<body>
+
+<!-- AMBIENT FLARES -->
+<div class="flare flare-a"></div>
+<div class="flare flare-b"></div>
+<div class="flare flare-c"></div>
+<div class="flare flare-mouse" id="flare-mouse"></div>
+
+<!-- ═══ HERO — SCROLL-DRIVEN CANVAS ══════════ -->
+<div id="hero-wrap">
+  <div id="hero-sticky">
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-veil"></div>
+    <div id="load-bar"></div>
+
+    <nav class="hero-nav">
+      <img src="logopixel/Pixel Fluent Emblema.svg" alt="Pixel Fluent" class="nav-logo">
+      <span class="nav-tag">Proposta Exclusiva</span>
+    </nav>
+
+    <div class="hero-content" id="hero-content">
+      <p class="hero-eyebrow">Ateliê de Blindagem Automotiva</p>
+      <h1 class="t-hero hero-title">
+        O marketing à altura<br>
+        <span>do seu cliente.</span>
+      </h1>
+      <p class="hero-desc">
+        Quem investe em um veículo premium não pesquisa preço.
+        Pesquisa reputação. Este plano coloca o Ateliê na frente dessa busca.
+      </p>
+      <a class="hero-cta" href="#section-cenario">
+        Proteja agora seu veículo
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+
+    <div class="scroll-arrow">
+      <div class="scroll-arrow-line"></div>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M12 5v14M5 16l7 7 7-7" stroke="rgba(255,255,255,.5)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ STATS STRIP ══════════════════════════ -->
+<div class="stats-strip" style="position:relative;z-index:2">
+  <div class="stat-item fi">
+    <span class="stat-n">8</span>
+    <span class="stat-l">Frentes simultâneas</span>
+  </div>
+  <div class="stat-item fi">
+    <span class="stat-n">12</span>
+    <span class="stat-l">Peças de conteúdo por mês</span>
+  </div>
+  <div class="stat-item fi">
+    <span class="stat-n">6</span>
+    <span class="stat-l">Meses de plano mínimo</span>
+  </div>
+</div>
+
+<div class="rule"></div>
+
+<!-- ═══ 01 — O CENÁRIO ════════════════════════ -->
+<section id="section-cenario">
+  <div class="wrap">
+    <div class="t-eyebrow fi" style="margin-bottom:14px">01 O Ponto de Partida</div>
+    <h2 class="t-heading fi">
+      Vocês atendem bem.<br>A ideia é fazer mais gente chegar até vocês.
+    </h2>
+    <p class="t-sub fi" style="margin-top:14px;max-width:580px">
+      Blindagem é uma compra de confiança. Quem está considerando pesquisa muito antes de ligar para qualquer empresa. Este plano constrói essa presença desde o começo.
+    </p>
+
+    <div class="cenario-grid fi">
+      <div>
+        <p style="font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:16px">O que construímos juntos</p>
+        <ul class="compare-list">
+          <li class="compare-item">
+            <span class="cico cico-ok">✓</span>Instagram ativo com conteúdo que mostra o trabalho de vocês
+          </li>
+          <li class="compare-item">
+            <span class="cico cico-ok">✓</span>Presença no Google quando alguém procura blindagem na região
+          </li>
+          <li class="compare-item">
+            <span class="cico cico-ok">✓</span>Avaliações reais acumulando ao longo do tempo
+          </li>
+          <li class="compare-item">
+            <span class="cico cico-ok">✓</span>Processo de atendimento a novos contatos que chegam pelo digital
+          </li>
+          <li class="compare-item">
+            <span class="cico cico-ok">✓</span>Conteúdo que mostra o ateliê por dentro e gera confiança antes do primeiro contato
+          </li>
+        </ul>
+      </div>
+      <div class="cenario-photo fi">
+        <img src="fotos/blindagem-automotiva.jpg" alt="Blindagem automotiva">
+        <div class="cenario-photo-glow"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- ═══ 02 — O QUE ENTREGAMOS ════════════════ -->
+<section class="alt">
+  <div class="wrap">
+    <div class="t-eyebrow fi" style="margin-bottom:14px">02 Entregas</div>
+    <h2 class="t-heading fi">8 frentes no mesmo plano.</h2>
+    <p class="t-sub fi" style="margin-top:14px;max-width:520px">
+      Cada parte do plano alimenta a outra. Instagram puxa Google, Google puxa contato, contato vira cliente.
+    </p>
+
+    <div class="deli-grid">
+      <div class="deli-card fi">
+        <span class="deli-icon">🎯</span>
+        <div class="deli-title">Marca</div>
+        <div class="deli-desc">Logo, paleta, tipografia, manual de marca e templates prontos. Identidade à altura do público de alto padrão.</div>
+      </div>
+      <div class="deli-card fi">
+        <span class="deli-icon">🌐</span>
+        <div class="deli-title">Site e SEO</div>
+        <div class="deli-desc">Site rápido e refinado com blog que atrai quem busca blindagem premium no Google.</div>
+      </div>
+      <div class="deli-card fi">
+        <span class="deli-icon">📄</span>
+        <div class="deli-title">Landing Pages</div>
+        <div class="deli-desc">Páginas dedicadas para Google Ads e Meta Ads. Feitas para converter clique em contato qualificado.</div>
+      </div>
+      <div class="deli-card fi">
+        <span class="deli-icon">📍</span>
+        <div class="deli-title">Google Negócio</div>
+        <div class="deli-desc">Perfil completo, estratégia de avaliações, posts semanais e fotos que impressionam quem pesquisa.</div>
+      </div>
+      <div class="deli-card fi">
+        <span class="deli-icon">🎬</span>
+        <div class="deli-title">7 Vídeos por Mês</div>
+        <div class="deli-desc">Roteiro, captação e edição inclusos. Publicados como Reels, Shorts e TikTok ao mesmo tempo.</div>
+      </div>
+      <div class="deli-card fi">
+        <span class="deli-icon">📸</span>
+        <div class="deli-title">5 Posts por Mês</div>
+        <div class="deli-desc">Design incluso. Carrossel, depoimentos e autoridade com a identidade visual do Ateliê.</div>
+      </div>
+      <div class="deli-card fi">
+        <span class="deli-icon">💰</span>
+        <div class="deli-title">Anúncios Pagos</div>
+        <div class="deli-desc">Google Ads para capturar intenção de compra. Meta Ads para atingir perfis de alto padrão. Gestão contínua.</div>
+      </div>
+      <div class="deli-card fi">
+        <span class="deli-icon">📊</span>
+        <div class="deli-title">Gestão e CRM</div>
+        <div class="deli-desc">Painel de operação, fluxo de leads qualificados e relatório mensal com os números que importam.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOTO BREAK ════════════════════════════ -->
+<div class="foto-break" style="position:relative;z-index:2">
+  <img src="fotos/vidro blindado.png" alt="Vidro blindado, teste balístico">
+  <div class="foto-break-overlay"></div>
+  <div class="foto-break-text">
+    <h3>O trabalho fala por si. O digital amplifica.</h3>
+    <p>Mostrar o processo é o maior diferencial nesse mercado</p>
+  </div>
+</div>
+
+<div class="rule"></div>
+
+<!-- ═══ 03 — O CONTEÚDO ══════════════════════ -->
+<section>
+  <div class="wrap">
+    <div class="t-eyebrow fi" style="margin-bottom:14px">03 Conteúdo</div>
+    <h2 class="t-heading fi">O que produzimos todo mês.</h2>
+    <p class="t-sub fi" style="margin-top:14px;max-width:540px">
+      Roteiro, gravação e edição por nossa conta. A captação cabe em 1 ou 2 dias no ateliê, sem interferir na operação de vocês.
+    </p>
+
+    <div class="plan-grid fi">
+      <div class="plan-block">
+        <div class="plan-head">
+          <div>
+            <div class="plan-lbl">Por mês</div>
+            <div class="plan-count">7</div>
+            <div class="plan-type">Vídeos</div>
+          </div>
+          <span class="plan-emoji">🎬</span>
+        </div>
+        <ul class="v-list">
+          <li class="v-item"><span class="v-num">01</span><div><div class="v-title">Tour pelo ateliê por dentro</div><div class="v-pillar">Transparência</div></div></li>
+          <li class="v-item"><span class="v-num">02</span><div><div class="v-title">Teste balístico ao vivo</div><div class="v-pillar">Prova</div></div></li>
+          <li class="v-item"><span class="v-num">03</span><div><div class="v-title">Do início ao fim: como funciona a blindagem</div><div class="v-pillar">Educação</div></div></li>
+          <li class="v-item"><span class="v-num">04</span><div><div class="v-title">Cliente conta a experiência com o Ateliê</div><div class="v-pillar">Prova Social</div></div></li>
+          <li class="v-item"><span class="v-num">05</span><div><div class="v-title">Quanto custa blindar um carro?</div><div class="v-pillar">Educação</div></div></li>
+          <li class="v-item"><span class="v-num">06</span><div><div class="v-title">Dia de entrega do veículo</div><div class="v-pillar">Confiança</div></div></li>
+          <li class="v-item"><span class="v-num">07</span><div><div class="v-title">O que as pessoas erram ao escolher blindagem</div><div class="v-pillar">Educação</div></div></li>
+        </ul>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="plan-block">
+          <div class="plan-head">
+            <div>
+              <div class="plan-lbl">Por mês</div>
+              <div class="plan-count">5</div>
+              <div class="plan-type">Posts</div>
+            </div>
+            <span class="plan-emoji">📸</span>
+          </div>
+          <ul class="p-list">
+            <li class="p-item"><span class="p-emo">↔️</span><div><div class="p-title">Antes e Depois do veículo</div><div class="p-type">Carrossel</div></div></li>
+            <li class="p-item"><span class="p-emo">⭐</span><div><div class="p-title">O que um cliente achou do serviço</div><div class="p-type">Imagem</div></div></li>
+            <li class="p-item"><span class="p-emo">📋</span><div><div class="p-title">Quando faz sentido blindar o carro</div><div class="p-type">Carrossel</div></div></li>
+            <li class="p-item"><span class="p-emo">🏆</span><div><div class="p-title">O Ateliê em números</div><div class="p-type">Institucional</div></div></li>
+            <li class="p-item"><span class="p-emo">💡</span><div><div class="p-title">O que considerar antes de blindar</div><div class="p-type">Carrossel</div></div></li>
+          </ul>
+        </div>
+        <div class="note-box"><strong>1 vídeo, 3 canais.</strong> Reel no Instagram, Short no YouTube e TikTok. Grava uma vez, publicamos em tudo.</div>
+        <div class="note-box"><strong>Captação inteligente.</strong> 1 a 2 dias de gravação no ateliê rendem o mês inteiro de conteúdo.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- ═══ 04 — COMO FUNCIONA ═══════════════════ -->
+<section class="alt">
+  <div class="wrap">
+    <div class="t-eyebrow fi" style="margin-bottom:14px">04 Processo</div>
+    <h2 class="t-heading fi">Como funciona na prática.</h2>
+    <p class="t-sub fi" style="margin-top:14px;max-width:500px">
+      Vocês aprovam antes de qualquer publicação. O fluxo é simples e cabe na rotina de quem tem operação para tocar.
+    </p>
+
+    <div class="process-grid fi">
+      <div class="process-photo">
+        <img src="fotos/WhatsApp-Image-2025-04-29-at-22.29.23-2.webp" alt="Processo de blindagem">
+      </div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-week"><div class="tl-wlabel">Semana 0</div></div>
+          <div class="tl-line"><div class="tl-dot"></div><div class="tl-con"></div></div>
+          <div><div class="tl-title">Planejamento</div><div class="tl-desc">Definimos os 12 conteúdos do mês, roteiros aprovados, captações agendadas. Tudo revisado antes de gravar.</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-week"><div class="tl-wlabel">Captação</div></div>
+          <div class="tl-line"><div class="tl-dot"></div><div class="tl-con"></div></div>
+          <div><div class="tl-title">Gravação em lote</div><div class="tl-desc">1 a 2 dias no ateliê. Equipe, equipamento e iluminação. O mês inteiro de vídeo em dois dias de trabalho.</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-week"><div class="tl-wlabel">Semana 1</div></div>
+          <div class="tl-line"><div class="tl-dot"></div><div class="tl-con"></div></div>
+          <div><div class="tl-title">Edição e aprovação</div><div class="tl-desc">Editamos no padrão visual do Ateliê. Legendas, correção de cor, trilha e acabamento premium. Você revisa e libera.</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-week"><div class="tl-wlabel">No mês</div></div>
+          <div class="tl-line"><div class="tl-dot"></div><div class="tl-con"></div></div>
+          <div><div class="tl-title">Postagem e comunidade</div><div class="tl-desc">Publicamos nos horários de maior alcance, respondemos comentários e directs, gerenciamos os anúncios.</div></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-week"><div class="tl-wlabel">Final</div></div>
+          <div class="tl-line"><div class="tl-dot"></div></div>
+          <div><div class="tl-title">Relatório e reunião</div><div class="tl-desc">Números reais: leads gerados, custo por lead, alcance, conversões. Planejamos o próximo mês juntos.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOTO BREAK 2 ══════════════════════════ -->
+<div class="foto-break" style="position:relative;z-index:2">
+  <img src="fotos/DD2NGIG7ZZN4DNIQW6PSG2YW7A.avif" alt="">
+  <div class="foto-break-overlay"></div>
+  <div class="foto-break-text">
+    <h3>Quem pesquisa blindagem quer ver antes de ligar.</h3>
+    <p>Conteúdo que gera confiança antes do primeiro contato</p>
+  </div>
+</div>
+
+<div class="rule"></div>
+
+<!-- ═══ 05 — RESULTADOS ══════════════════════ -->
+<section>
+  <div class="wrap">
+    <div class="t-eyebrow fi" style="margin-bottom:14px">05 Resultados</div>
+    <h2 class="t-heading fi">O que acompanhamos todo mês.</h2>
+    <p class="t-sub fi" style="margin-top:14px">
+      Relatório mensal com os números que mostram se o trabalho está funcionando.
+    </p>
+
+    <div class="results-grid-wrap fi">
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <span class="kpi-val">8–15%</span>
+          <div class="kpi-lbl">Visitantes convertidos em leads nas landing pages</div>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-val">60%+</span>
+          <div class="kpi-lbl">Leads que recebem orçamento formal</div>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-val">25–35%</span>
+          <div class="kpi-lbl">Orçamentos que fecham negócio</div>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-val">4.8+</span>
+          <div class="kpi-lbl">Nota no Google ao final de 6 meses</div>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-val">50+</span>
+          <div class="kpi-lbl">Avaliações reais no Google em 6 meses</div>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-val">#1</span>
+          <div class="kpi-lbl">Posição local no Google para "blindagem [cidade]"</div>
+        </div>
+      </div>
+
+      <div class="results-photo fi">
+        <img src="fotos/palavra-chave.jpg" alt="Posicionamento Google">
+        <div class="results-photo-caption">Posicionamento Google · Busca local</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="rule"></div>
+
+<!-- ═══ 06 — 6 MESES ═════════════════════════ -->
+<section id="commitment">
+  <div class="wrap">
+    <div class="commit-eyebrow fi">06 Compromisso</div>
+    <h2 class="commit-title fi">
+      Plano mínimo<br>de 6 meses.
+    </h2>
+    <p class="commit-sub fi">
+      Nos primeiros dois meses construímos a base: identidade visual, site e primeiros conteúdos.
+      A partir do terceiro, a presença começa a ganhar tração.
+      Resultados de digital levam tempo para aparecer, mas aparecem.
+    </p>
+
+    <div class="months-row fi">
+      <div class="m-pill">Mês 1</div>
+      <div class="m-pill">Mês 2</div>
+      <div class="m-pill">Mês 3</div>
+      <div class="m-pill">Mês 4</div>
+      <div class="m-pill">Mês 5</div>
+      <div class="m-pill">Mês 6</div>
+    </div>
+
+    <div class="commit-note fi">
+      Mês 1 e 2: marca, site e identidade visual &nbsp;/&nbsp;
+      Mês 3 e 4: conteúdo em produção e anúncios ativos &nbsp;/&nbsp;
+      Mês 5 e 6: escala e otimização contínua
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 07 — PIXEL FLUENT ════════════════════ -->
+<section id="pixelfluent">
+  <div class="wrap">
+    <div class="t-eyebrow fi" style="margin-bottom:28px">07 Quem Executa</div>
+    <div class="pf-row fi">
+      <div class="pf-logo">
+        <img src="logopixel/Pixel Fluent Emblema.svg" alt="Pixel Fluent">
+      </div>
+      <div class="pf-sep"></div>
+      <div>
+        <div class="pf-eyebrow">Quem executa</div>
+        <div class="pf-name">Pixel Fluent</div>
+        <div class="pf-desc">
+          Cuidamos de estratégia, design, conteúdo e gestão.
+          Vocês continuam focados na blindagem. A gente cuida do que aparece online.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Proposta elaborada por Pixel Fluent para Ateliê de Blindagem Automotiva · 2026</p>
+  </div>
+</footer>
+
+<script>
+/* ── MOUSE FLARE ──────────────────────────────── */
+const mouseFlare = document.getElementById('flare-mouse');
+let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  mouseFlare.style.left = mx + 'px';
+  mouseFlare.style.top  = my + 'px';
+}, {passive:true});
+
+/* ── HERO CANVAS SCROLL ANIMATION ─────────────── */
+(function(){
+  const canvas    = document.getElementById('hero-canvas');
+  const ctx       = canvas.getContext('2d');
+  const wrap      = document.getElementById('hero-wrap');
+  const heroContent = document.getElementById('hero-content');
+  const loadBar   = document.getElementById('load-bar');
+
+  const TOTAL     = 186;
+  const START     = 50;   /* frames begin at ezgif-frame-050 */
+  const images    = new Array(TOTAL).fill(null);
+  let   loaded    = 0;
+  let   curFrame  = 0;
+  let   rafPending = false;
+
+  function pad(n){ return String(n).padStart(3,'0') }
+  function path(i){ return `banner/ezgif-frame-${pad(i + START)}.jpg` }
+
+  /* resize canvas to viewport */
+  function resizeCanvas(){
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    if(images[curFrame]) drawFrame(images[curFrame]);
+  }
+  window.addEventListener('resize', resizeCanvas, {passive:true});
+  resizeCanvas();
+
+  /* draw a frame cover-fill with dark overlay baked in */
+  function drawFrame(img){
+    if(!img || !img.complete) return;
+    const cw = canvas.width, ch = canvas.height;
+    const iw = img.naturalWidth, ih = img.naturalHeight;
+    const scale = Math.max(cw/iw, ch/ih);
+    const w = iw*scale, h = ih*scale;
+    ctx.clearRect(0,0,cw,ch);
+    ctx.drawImage(img, (cw-w)/2, (ch-h)/2, w, h);
+    /* darken directly on canvas so text is always legible */
+    ctx.fillStyle = 'rgba(4,5,12,0.48)';
+    ctx.fillRect(0,0,cw,ch);
+  }
+
+  /* load first frame immediately */
+  const f0 = new Image();
+  f0.src = path(0);
+  f0.onload = () => {
+    images[0] = f0;
+    loaded = 1;
+    drawFrame(f0);
+    loadRest();
+  };
+
+  /* load remaining frames in batches to avoid network congestion */
+  function loadRest(){
+    let i = 1;
+    function next(){
+      if(i >= TOTAL) return;
+      const img = new Image();
+      img.src = path(i);
+      const idx = i;
+      img.onload = () => {
+        images[idx] = img;
+        loaded++;
+        loadBar.style.width = (loaded / TOTAL * 100) + '%';
+        if(loaded === TOTAL) loadBar.style.opacity = '0';
+        next();
+      };
+      img.onerror = () => { loaded++; next(); };
+      i++;
+    }
+    /* launch 6 parallel loaders */
+    for(let k=0; k<6; k++) next();
+  }
+
+  /* scroll handler */
+  function onScroll(){
+    if(rafPending) return;
+    rafPending = true;
+    requestAnimationFrame(updateFrame);
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+
+  function updateFrame(){
+    rafPending = false;
+    const scrollY  = window.scrollY;
+    const maxScroll = wrap.offsetHeight - window.innerHeight;
+    const progress  = Math.max(0, Math.min(scrollY / maxScroll, 1));
+
+    /* fade out hero text after 15% scroll */
+    const textAlpha = 1 - Math.min(progress / 0.15, 1);
+    heroContent.style.opacity = textAlpha;
+
+    /* select frame */
+    const idx = Math.min(Math.floor(progress * (TOTAL - 1)), TOTAL - 1);
+    if(images[idx] && idx !== curFrame){
+      curFrame = idx;
+      drawFrame(images[idx]);
+    }
+  }
+})();
+
+/* ── FADE IN ON SCROLL ────────────────────────── */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('on') });
+}, {threshold: 0.08});
+
+document.querySelectorAll('.fi').forEach((el, i) => {
+  const parent = el.closest('.deli-grid, .kpi-grid, .stats-strip');
+  if(parent){
+    const idx = [...parent.querySelectorAll('.fi')].indexOf(el);
+    el.style.transitionDelay = idx * 0.07 + 's';
+  }
+  io.observe(el);
+});
+</script>
+</body>
+</html>
